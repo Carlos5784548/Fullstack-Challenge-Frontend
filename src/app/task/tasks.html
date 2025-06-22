@@ -1,23 +1,27 @@
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-  <h2 class="text-2xl font-bold text-gray-800">Tus tareas</h2>
+<!-- Header -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+  <h2 class="text-3xl font-bold text-gray-900 tracking-tight">📋 Tus tareas</h2>
   <button (click)="logout()"
-    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-sm transition">
+    class="bg-red-600 hover:bg-red-700 text-white px-5 py-2.5 rounded-xl shadow transition duration-200">
     Cerrar sesión
   </button>
 </div>
 
-<form [formGroup]="taskForm" (ngSubmit)="submit()" class="grid gap-4 mb-8 bg-white p-6 rounded-lg shadow-md">
+<!-- Formulario de tarea -->
+<form [formGroup]="taskForm" (ngSubmit)="submit()"
+  class="grid gap-5 mb-10 bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+  
   <input formControlName="titulo" placeholder="Título" required
-    class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+    class="border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
 
   <textarea formControlName="descripcion" placeholder="Descripción"
-    class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+    class="border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none min-h-[100px]"></textarea>
 
-  <input type="fechaLimite" formControlName="fechaLimite"
-    class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+  <input type="date" formControlName="fechaLimite"
+    class="border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
 
   <select formControlName="estado"
-    class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    class="border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
     <option value="pendiente">Pendiente</option>
     <option value="en progreso">En progreso</option>
     <option value="completada">Completada</option>
@@ -25,25 +29,37 @@
 
   <div class="flex gap-3 flex-wrap">
     <button type="submit"
-      class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md transition shadow">
+      class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg transition shadow font-semibold">
       {{ editingTask ? 'Actualizar' : 'Crear' }}
     </button>
     <button *ngIf="editingTask" type="button" (click)="cancelEdit()"
-      class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded-md transition shadow">
+      class="bg-gray-400 hover:bg-gray-500 text-white px-5 py-2.5 rounded-lg transition shadow font-semibold">
       Cancelar
     </button>
   </div>
 </form>
 
-<ul class="space-y-4">
+
+<!-- Botón para ver tareas -->
+<div class="flex justify-end mb-6">
+  <button (click)="loadTasks()"
+    class="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-lg shadow transition font-semibold">
+    Ver tareas
+  </button>
+</div>
+<!-- Lista de tareas -->
+<ul class="space-y-5">
   <li *ngFor="let task of tasks"
-    class="bg-white rounded-lg shadow p-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 hover:shadow-md transition">
+    class="bg-white rounded-xl shadow-sm p-5 border border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 hover:shadow-md transition">
+    
     <div class="flex-1">
-      <h3 class="font-semibold text-lg text-gray-800 flex items-center gap-2">
+      <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
         📝 {{ task.titulo }}
       </h3>
-      <p class="text-sm text-gray-600">{{ task.descripcion }}</p>
-      <p class="text-xs text-gray-400 mt-1">📅 Fecha límite: {{ task.fechaLimite || 'Sin fecha' }}</p>
+      <p class="text-sm text-gray-700 mt-1">{{ task.descripcion }}</p>
+      <p class="text-xs text-gray-500 mt-2">📅 Fecha límite:
+        <span class="font-medium text-gray-700">{{task.fecha_limite | date:'yyyy-MM-dd' }}</span>
+      </p>
       <p class="text-xs mt-1">
         📌 Estado:
         <span [ngClass]="{
@@ -55,11 +71,12 @@
         </span>
       </p>
     </div>
-    <div class="flex gap-2 justify-end">
+
+    <div class="flex gap-3 justify-end">
       <button (click)="edit(task)"
-        class="text-indigo-600 hover:underline text-sm font-medium">Editar</button>
+        class="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition">Editar</button>
       <button (click)="delete(task.id!)"
-        class="text-red-600 hover:underline text-sm font-medium">Borrar</button>
+        class="text-red-600 hover:text-red-800 text-sm font-medium transition">Borrar</button>
     </div>
   </li>
 </ul>

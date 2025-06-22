@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth} from '../services/auth'; // Ajusta la ruta si es necesario
-import { loginRequest } from '../services/loginRequest';   // Ajusta la ruta si es necesario
+import { loginRequest } from '../models/loginRequest';   // Ajusta la ruta si es necesario
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 @Component({

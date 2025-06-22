@@ -36,18 +36,31 @@ export class Tasks implements OnInit {
 
   submit() {
     if (this.taskForm.invalid) return;
-    if (this.editingTask) {
-      this.taskService.updateTask(this.editingTask.id!, this.taskForm.value).subscribe(() => {
+
+  if (this.editingTask) {
+    this.taskService.updateTask(this.editingTask.id!, this.taskForm.value).subscribe({
+      next: () => {
         this.editingTask = null;
-        this.taskForm.reset({ status: 'pendiente' });
+        this.taskForm.reset({ estado: 'pendiente' });
         this.loadTasks();
-      });
-    } else {
-      this.taskService.createTask(this.taskForm.value).subscribe(() => {
-        this.taskForm.reset({ status: 'pendiente' });
+      },
+      error: (err) => {
+        console.error('Error al actualizar tarea', err);
+        alert('Error al actualizar la tarea. Intenta nuevamente.');
+      }
+    });
+  } else {
+    this.taskService.createTask(this.taskForm.value).subscribe({
+      next: () => {
+        this.taskForm.reset({ estado: 'pendiente' });
         this.loadTasks();
-      });
-    }
+      },
+      error: (err) => {
+        console.error('Error al crear tarea', err);
+        alert('Error al crear la tarea. Intenta nuevamente.');
+      }
+    });
+  }
   }
 
   edit(task: Task) {
