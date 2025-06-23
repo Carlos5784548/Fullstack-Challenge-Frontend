@@ -5,6 +5,7 @@ import { TaskService } from '../services/task.service';
 import { Task } from '../task/task.model';
 
 
+
 @Component({
   selector: 'app-tasks',
   standalone: true,
@@ -22,7 +23,8 @@ export class Tasks implements OnInit {
       titulo: ['', Validators.required],
       descripcion: [''],
       fechaLimite: [''],
-      estado: ['pendiente', Validators.required]
+      estado: ['pendiente', Validators.required],
+    
     });
   }
 
@@ -31,18 +33,25 @@ export class Tasks implements OnInit {
   }
 
   loadTasks() {
-    this.taskService.getTasks().subscribe(tasks => this.tasks = tasks);
-  }
+  this.taskService.getTasks().subscribe(tasks => this.tasks = tasks);
+}
 
-  submit() {
-    if (this.taskForm.invalid) return;
+submit() {
+  if (this.taskForm.invalid) return;
+
+  const nuevaTarea = this.taskForm.value;
 
   if (this.editingTask) {
-    this.taskService.updateTask(this.editingTask.id!, this.taskForm.value).subscribe({
-      next: () => {
+    // Modo edición
+    this.taskService.updateTask(this.editingTask.id!, nuevaTarea).subscribe({
+      next: (tareaActualizada) => {
+        // Reemplazá la tarea en el array por la actualizada
+        const index = this.tasks.findIndex(t => t.id === tareaActualizada.id);
+        if (index !== -1) {
+          this.tasks[index] = tareaActualizada;
+        }
         this.editingTask = null;
         this.taskForm.reset({ estado: 'pendiente' });
-        this.loadTasks();
       },
       error: (err) => {
         console.error('Error al actualizar tarea', err);
@@ -50,10 +59,11 @@ export class Tasks implements OnInit {
       }
     });
   } else {
-    this.taskService.createTask(this.taskForm.value).subscribe({
-      next: () => {
+    // Modo creación
+    this.taskService.createTask(nuevaTarea).subscribe({
+      next: (tareaCreada) => {
+        this.tasks.push(tareaCreada); // Agregá la tarea devuelta por el backend
         this.taskForm.reset({ estado: 'pendiente' });
-        this.loadTasks();
       },
       error: (err) => {
         console.error('Error al crear tarea', err);
@@ -61,16 +71,24 @@ export class Tasks implements OnInit {
       }
     });
   }
-  }
+}
 
-  edit(task: Task) {
-    this.editingTask = task;
-    this.taskForm.patchValue(task);
-  }
+edit(task: Task) {
+  this.editingTask = task;
+  this.taskForm.patchValue(task);
+}
 
-  delete(id: string) {
-    this.taskService.deleteTask(id).subscribe(() => this.loadTasks());
-  }
+delete(id: string | number) {
+  const idStr = String(id);
+  console.log('Eliminar localmente ID:', idStr);
+  const antes = this.tasks.length;
+  this.tasks = this.tasks.filter(t => String(t.id) !== idStr);
+  const despues = this.tasks.length;
+  console.log(`Tareas antes: ${antes}, después: ${despues}`);
+}
+
+
+
 
   cancelEdit() {
     this.editingTask = null;
