@@ -36,20 +36,26 @@ export class Register {
     return this.registerForm.get('password');
   }
 
-  register() {
-    if (this.registerForm.valid) {
-      this.registerError = "";
-      this.auth.register(this.registerForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/login']);
-        },
-        error: (err) => {
+register() {
+  if (this.registerForm.valid) {
+    this.registerError = "";
+    this.auth.register(this.registerForm.value).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error(err);
+        if (err.status === 400) {
+          this.registerError = 'El usuario ya existe';
+        } else {
           this.registerError = err.error?.message || 'Error al registrar usuario';
         }
-      });
-    } else {
-      this.registerForm.markAllAsTouched();
-      alert("Completa todos los campos correctamente.");
-    }
+      }
+    });
+  } else {
+    this.registerForm.markAllAsTouched();
+    alert("Completa todos los campos correctamente.");
   }
+}
+
 }

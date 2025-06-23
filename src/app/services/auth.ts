@@ -65,7 +65,13 @@ export class Auth {
     } else if (error.status === 500) {
       console.error('Error interno del servidor:', error.error);
       return throwError(() => new Error('Error del servidor. Inténtelo más tarde.'));
-    } else {
+    } 
+    else if (error.status === 401) {
+      console.error('Credenciales incorrectas. Por favor, verificá tu email y contraseña.', error.error);
+       alert("🔒 Credenciales incorrectas");
+      return throwError(() => new Error('Credenciales incorrectas. Por favor, verificá tu email y contraseña.'));
+    } 
+    else {
       console.error('Error inesperado:', error.error);
       return throwError(() => new Error('Ocurrió un error inesperado.'));
     }

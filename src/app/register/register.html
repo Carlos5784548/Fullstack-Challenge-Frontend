@@ -53,6 +53,11 @@
       <a [routerLink]="['/login']" class="text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer">
         ¿Ya tienes cuenta? Inicia sesión
       </a>
+     
     </div>
+    <!-- Error general del backend -->
+       <p *ngIf="registerError" class="text-red-700 font-semibold mt-4">
+       {{ registerError }}
+      </p>
   </div>
 </div>

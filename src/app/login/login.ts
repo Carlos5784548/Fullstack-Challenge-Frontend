@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Auth} from '../services/auth'; // Ajusta la ruta si es necesario
-import { loginRequest } from '../models/loginRequest';   // Ajusta la ruta si es necesario
+import { Auth} from '../services/auth';
+import { loginRequest } from '../models/loginRequest';   
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 @Component({
@@ -38,27 +38,30 @@ export class Login implements OnInit {
   }
 
   login() {
-    if (this.loginForm.valid) {
-      this.loginError = "";
-      this.loginService.login(this.loginForm.value as loginRequest).subscribe({
-        next: (userData) => {
-          console.log(userData);
-        },
-        error: (errorData) => {
-          console.error(errorData);
-          this.loginError = errorData;
-        },
-        complete: () => {
-          console.info("Login completo");
-          this.router.navigateByUrl('/tareas');
-          this.loginForm.reset();
+  if (this.loginForm.valid) {
+    this.loginError = "";
+    this.loginService.login(this.loginForm.value as loginRequest).subscribe({
+      next: (userData) => {
+        console.log(userData);
+        this.router.navigateByUrl('/tareas');
+        this.loginForm.reset();
+      },
+      error: (errorData) => {
+        console.error(errorData);
+        if (errorData.status === 401) {
+          alert("🔒 Credenciales incorrectas");
+          this.loginError = "Credenciales incorrectas. Por favor, verificá tu email y contraseña.";
+        } else {
+          this.loginError = "Ocurrió un error al iniciar sesión. Intentalo más tarde.";
         }
-      });
-    } else {
-      this.loginForm.markAllAsTouched();
-      alert("Error al ingresar los datos.");
-    }
+      }
+    });
+  } else {
+    this.loginForm.markAllAsTouched();
+    alert("Error al ingresar los datos.");
   }
+}
+
 
   goToRegister() {
     this.router.navigate(['/register']);
