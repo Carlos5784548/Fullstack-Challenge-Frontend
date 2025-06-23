@@ -1,3 +1,35 @@
+## 📋 Descripción
+
+Aplicación frontend desarrollada en **Angular 19** para gestionar tareas personales con funcionalidades de autenticación. Permite a los usuarios registrarse, iniciar sesión y realizar operaciones CRUD sobre sus propias tareas, asegurando que cada usuario solo pueda acceder a sus datos.
+
+El frontend consume un backend desarrollado en Node.js con Express, que expone una API REST segura mediante JWT.
+
+---
+
+## 🚀 Tecnologías utilizadas
+
+- **Angular 19**
+- **Tailwind CSS v4** para estilos
+- **JWT** para autenticación y manejo de sesión
+- Comunicación con backend REST en **Node.js + Express**
+- Gestión del estado y manejo de errores en Angular
+
+---
+
+## 🎯 Objetivo
+
+- Permitir a los usuarios registrarse y autenticarse.
+- Gestionar tareas personales con campos:
+  - Título (obligatorio)
+  - Descripción
+  - Fecha límite
+  - Estado (pendiente, en progreso, completada)
+- Asegurar que cada usuario sólo vea y modifique sus propias tareas.
+- Manejar errores y validaciones desde frontend y backend.
+
+---
+
+
 # Gestiontareas
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
